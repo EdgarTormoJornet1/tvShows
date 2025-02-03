@@ -1,0 +1,16 @@
+<div class="container">
+
+    <div class="row g-4 mt-1">
+
+@for (tvshow of tvshows | filter:searchValue; track $index) {
+  <div class="col">
+<app-tvshow-card [tvshow]="tvshow"
+></app-tvshow-card>
+</div>
+
+}
+
+
+
+</div>
+</div>

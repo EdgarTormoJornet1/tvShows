@@ -1,0 +1,86 @@
+<div class="container">
+    <!--
+        <div>{{ email | json }}</div>
+       <div>Dirty: {{ emailInput.dirty }}</div>
+       <div>Valid: {{ emailInput.valid }}</div>
+       <div>Value: {{ emailInput.value }}</div>
+       <div>Errors: {{ emailInput.errors | json }}</div>
+    
+        <div>Touched: {{ loginFrom.touched }}</div>
+       <div>Valid: {{ loginFrom.valid }}</div>
+       <div>Value: {{ loginFrom.value | json }}</div>
+       <div>Descripción: {{loginFrom.control.get('description')?.value | json}}</div>
+    
+    -->
+        <h2 class="text-center text-primary fw-bold">Formulario de registro</h2><br/>
+        <form [formGroup]="registerForm">
+            <div class="mb-3">
+            <label for="exampleInputEmail1" class="form-label">Correo electrónico</label>
+            <input 
+            type="email" 
+            [ngModel]="email"
+            name="email"
+            formControlName="email"
+            class="form-control" 
+            minlength="5"
+            maxlength="600"
+            pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
+            id="exampleInputEmail1" 
+            aria-describedby="emailHelp"
+            [ngClass]="emailNotValid ? 'is-invalid': 'is-valid'"
+            >
+
+            @if (emailNotValid) {
+                <div class="alert alert-danger">El correo no tiene el formato correcto</div>
+            }
+
+            </div>
+            <div formGroupName="passwords" [ngClass]="crossPasswordsNotValid ? 'bg-warning' : 'bg-success'">
+            <div class="mb-3" >
+
+                {{registerForm.get('passwords')?.status}}
+
+                <label for="exampleInputPassword1" class="form-label">Contraseña</label>
+                <input 
+                type="password" 
+                [ngModel]="password"
+                name="password"
+                formControlName="password"
+                class="form-control" 
+                id="exampleInputPassword1"
+                [ngClass]="password1NotValid"
+                >
+            </div>
+
+
+
+            <!--
+            @if (password1NotValid) {
+                <div class="alert alert-danger">La contraseña no tiene el formato correcto</div>
+            }-->
+
+            <div class="mb-3">
+                <label for="exampleInputPassword2" class="form-label">Repite contraseña</label>
+                <input 
+                type="password" 
+                name="password2"
+                formControlName="password2"
+                class="form-control" 
+                id="exampleInputPassword2"
+                [ngClass]="password2NotValid"
+                >
+            </div>
+
+        </div>
+
+            <!--
+            @if (password2NotValid) {
+                <div class="alert alert-danger">La contraseña no tiene el formato correcto</div>
+            }
+                -->
+    
+            <button type="submit" class="btn btn-primary" (click)="sendRegister()">Login</button>
+    
+        </form>
+    
+    </div>

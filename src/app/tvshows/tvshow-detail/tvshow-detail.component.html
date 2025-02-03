@@ -1,0 +1,97 @@
+<!--
+<div class="container py-5">
+
+    <h2 class="text-center text-primary mb-4">{{ tvshow?.name }}</h2>
+
+    <div class="row">
+        <div class="col-md-12">
+
+            <img 
+                src="https://image.tmdb.org/t/p/w500/{{ tvshow?.backdrop_path }}" 
+                alt="{{ tvshow?.name }}" 
+                class="img-fluid float-md-end ms-md-4 mt-md-4 mb-3 rounded shadow" 
+                style="max-width: 500px;"
+            >
+
+
+            <div class="content">
+                <h3 class="text-secondary mt-3">Overview</h3>
+                <p class="text-muted">{{ tvshow?.overview }}</p>
+
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item"><strong>📅 Estreno:</strong> {{ tvshow?.first_air_date }}</li>
+                    <li class="list-group-item"><strong>🏁 Finalización:</strong> {{ tvshow?.last_air_date || "En emisión" }}</li>
+                    <li class="list-group-item"><strong>📺 Temporadas:</strong> {{ tvshow?.number_of_seasons }}</li>
+                    <li class="list-group-item"><strong>🎬 Episodios:</strong> {{ tvshow?.number_of_episodes }}</li>
+                    <li class="list-group-item"><strong>⭐ Puntuación:</strong> {{ tvshow?.vote_average }} ({{ tvshow?.vote_count }} votos)</li>
+                    <li class="list-group-item"><strong>🎭 Géneros:</strong> {{ tvshow?.genres }}</li>
+                    <li class="list-group-item"><strong>👨‍🎨 Creadores:</strong> {{ tvshow?.created_by }}</li>
+                    <li class="list-group-item"><strong>📡 Red:</strong> {{ tvshow?.networks }}</li>
+                    <li class="list-group-item"><strong>🌍 País de origen:</strong> {{ tvshow?.origin_country }}</li>
+                </ul>
+
+
+                 @if (logged) {
+                    <a 
+                        [routerLink]="['/edit_tvshow', tvshow?.id]" 
+                        class="btn btn-brand-orange text-white fw-bold shadow-sm mt-3"
+                        style="background-color: #ff6600; border: none; padding: 10px 20px; border-radius: 5px;"
+                    >
+                        Edit TV Show
+                    </a>
+                 }
+
+            </div>
+        </div>
+    </div>
+</div>
+
+-->
+
+
+<div class="container py-5">
+    <h2 class="text-center text-uppercase fw-bold text-gradient mb-4">{{ tvshow?.name }}</h2>
+
+    <div class="row align-items-start">
+        <div class="col-lg-6">
+            <div class="image-container position-relative">
+                <img 
+                    src="https://image.tmdb.org/t/p/w500/{{ tvshow?.backdrop_path }}"
+                    alt="{{ tvshow?.name }}" 
+                    class="img-fluid rounded shadow-lg w-100 object-fit-cover"
+                >
+                <div class="overlay"></div>
+            </div>
+        </div>
+
+        <div class="col-lg-6">
+            <div class="content p-4 bg-light rounded shadow-sm">
+                <h3 class="text-secondary mb-3">📖 Sinopsis</h3>
+                <p class="text-muted">{{ tvshow?.overview }}</p>
+
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item bg-transparent"><strong>📅 Estreno:</strong> {{ tvshow?.first_air_date }}</li>
+                    <li class="list-group-item bg-transparent"><strong>🏁 Finalización:</strong> {{ tvshow?.last_air_date || "En emisión" }}</li>
+                    <li class="list-group-item bg-transparent"><strong>📺 Temporadas:</strong> {{ tvshow?.number_of_seasons }}</li>
+                    <li class="list-group-item bg-transparent"><strong>🎬 Episodios:</strong> {{ tvshow?.number_of_episodes }}</li>
+                    <li class="list-group-item bg-transparent"><strong>⭐ Puntuación:</strong> {{ tvshow?.vote_average }} ({{ tvshow?.vote_count }} votos)</li>
+                    <li class="list-group-item bg-transparent"><strong>🎭 Géneros:</strong> {{ tvshow?.genres }}</li>
+                    <li class="list-group-item bg-transparent"><strong>👨‍🎨 Creadores:</strong> {{ tvshow?.created_by }}</li>
+                    <li class="list-group-item bg-transparent"><strong>📡 Red:</strong> {{ tvshow?.networks }}</li>
+                    <li class="list-group-item bg-transparent"><strong>🌍 País de origen:</strong> {{ tvshow?.origin_country }}</li>
+                </ul>
+
+
+                @if (logged) {
+                    <a 
+                        [routerLink]="['/edit_tvshow', tvshow?.id]" 
+                        class="btn btn-custom text-white fw-bold shadow mt-4"
+                    >
+                        ✏️ Editar TV Show
+                    </a>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+

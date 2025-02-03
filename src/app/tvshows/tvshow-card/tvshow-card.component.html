@@ -1,0 +1,9 @@
+<div class="card" style="width: 18rem;">
+  <a [routerLink]="['/tvshow', tvshow.id]" style="text-decoration: none;">
+      <img src="https://image.tmdb.org/t/p/w500/{{tvshow.poster_path}}" class="card-img-top" alt="{{tvshow.name}}">
+      <div class="card-body">
+          <h5 class="card-title text-center">{{ tvshow.name || "Sin título" }}</h5>
+          <p class="text-center">⭐ {{ tvshow.vote_average }} | 📅 {{ tvshow.first_air_date }}</p>
+      </div>
+  </a>
+</div>

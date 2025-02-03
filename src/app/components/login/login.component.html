@@ -1,0 +1,67 @@
+<div class="container">
+    <!--
+        <div>{{ email | json }}</div>
+       <div>Dirty: {{ emailInput.dirty }}</div>
+       <div>Valid: {{ emailInput.valid }}</div>
+       <div>Value: {{ emailInput.value }}</div>
+       <div>Errors: {{ emailInput.errors | json }}</div>
+    
+        <div>Touched: {{ loginFrom.touched }}</div>
+       <div>Valid: {{ loginFrom.valid }}</div>
+       <div>Value: {{ loginFrom.value | json }}</div>
+       <div>Descripción: {{loginFrom.control.get('description')?.value | json}}</div>
+    
+    -->
+        <h2 class="text-center text-primary fw-bold">Formulario de login</h2><br/>
+        <form #loginFrom="ngForm">
+            <div class="mb-3">
+            <label for="exampleInputEmail1" class="form-label">Correo electrónico</label>
+            <input 
+            type="email" 
+            name="email" 
+            [(ngModel)]="email"
+            class="form-control" 
+            required
+            minlength="5"
+            maxlength="600"
+            pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
+            id="exampleInputEmail1" 
+            aria-describedby="emailHelp"
+            #emailInput="ngModel"
+            [ngClass]="{'is-valid': emailInput.touched && emailInput.valid,
+             'is-invalid': emailInput.touched && !emailInput.valid}">
+    
+    
+    
+            @if (emailInput.touched && !emailInput.valid && emailInput.value) {
+                <div class="alert alert-danger">El correo no tiene el formato correcto</div>
+            }
+    
+           
+            </div>
+            <div class="mb-3">
+                <label for="exampleInputPassword1" class="form-label">Contraseña</label>
+                <input 
+                type="password" 
+                name="password"
+                class="form-control" 
+                id="exampleInputPassword1"
+                [(ngModel)]="password"
+                #passwordInput="ngModel"
+                minlength="1"
+                required
+    
+                [ngClass]="{'is-valid': passwordInput.touched && passwordInput.valid,
+                'is-invalid': passwordInput.touched && !passwordInput.valid}"
+                >
+            </div>
+    
+            <button type="submit" class="btn btn-primary" [disabled]="!loginFrom.valid" (click)="sendLogin()">Login</button>
+    
+    
+            @if (error) {
+                <div class="alert alert-danger">{{error}}</div>
+            }
+        </form>
+    
+    </div>

@@ -1,0 +1,29 @@
+
+.text-gradient {
+    color: #ff6600;
+}
+
+.image-container {
+    overflow: hidden;
+    border-radius: 15px;
+}
+
+.image-container img {
+    transition: transform 0.3s ease-in-out;
+}
+
+.image-container:hover img {
+    transform: scale(1.05);
+}
+
+.btn-custom {
+    background-color: #ff6600;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 8px;
+        
+}
+
+.btn-custom:hover {
+    background-color: #ff4500;
+}
