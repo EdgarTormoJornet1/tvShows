@@ -1,0 +1,50 @@
+name: Build and Deploy Angular App
+
+on:
+  push:
+    branches:
+      - main  # Asegura't que la branca és correcta
+    paths:
+      - angular-app/**  # Executa només si es modifica aquesta carpeta
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '20'
+
+    - name: Install dependencies
+      working-directory: angular-app
+      run: npm install
+
+    - name: Build Angular App
+      working-directory: angular-app
+      run: npm run build --configuration=production
+
+    - name: Copy build to remote server
+      env:
+        REMOTE_USER: ${{ secrets.REMOTE_USER }}
+        REMOTE_HOST: ${{ secrets.REMOTE_HOST }}
+        REMOTE_PASSWORD: ${{ secrets.REMOTE_PASSWORD }}
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y sshpass
+        mkdir -p ~/.ssh
+        ssh-keyscan -H ${{ secrets.REMOTE_HOST }} >> ~/.ssh/known_hosts
+        echo "Added ${{ secrets.REMOTE_HOST }} to known_hosts."
+        sshpass -p "${REMOTE_PASSWORD}" scp -r angular-app/dist/tv-shows/browser/* ${REMOTE_USER}@${REMOTE_HOST}:/var/www/angular-app/dist/tv-shows/browser
+
+    - name: Restart Apache
+      env:
+        REMOTE_USER: ${{ secrets.REMOTE_USER }}
+        REMOTE_HOST: ${{ secrets.REMOTE_HOST }}
+        REMOTE_PASSWORD: ${{ secrets.REMOTE_PASSWORD }}
+      run: |
+        sshpass -p "${REMOTE_PASSWORD}" ssh ${REMOTE_USER}@${REMOTE_HOST} "sudo systemctl restart apache2"
