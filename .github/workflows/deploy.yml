@@ -22,9 +22,9 @@ jobs:
       with:
         node-version: '20'
 
-    # Paso 3: Instalar dependencias en el directorio del proyecto Angular (ya que está en /angular-app en tu repo)
+    # Paso 3: Instalar dependencias en el directorio correcto
     - name: Install dependencies
-      working-directory: ./angular-app  # Cambié el directorio aquí
+      working-directory: ./angular-app  # Apunta directamente al directorio de tu app Angular
       run: |
         npm install
         # Instalar Angular CLI si no está disponible
@@ -32,7 +32,7 @@ jobs:
 
     # Paso 4: Construir el proyecto Angular
     - name: Build Angular App
-      working-directory: ./angular-app  # Cambié el directorio aquí
+      working-directory: ./angular-app  # Apunta directamente al directorio de tu app Angular
       run: |
         npm run build --configuration=production --base-href '/tvShows/'
 
