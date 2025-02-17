@@ -29,8 +29,7 @@ jobs:
 
     - name: Build Angular App
       working-directory: ./
-      run: |
-        sudo ng build --configuration production --base-href='/'
+      run: sudo npm run build --configuration production --base-href='/'
 
     - name: Copy build to remote server
       env:
