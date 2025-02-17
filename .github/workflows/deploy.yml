@@ -22,7 +22,7 @@ jobs:
       with:
         node-version: '20'
 
-    # Paso 3: Instalar dependencias en el directorio correcto
+    # Paso 3: Instalar dependencias
     - name: Install dependencies
       working-directory: ./  # Trabaja en la raíz del repositorio
       run: |
@@ -33,9 +33,10 @@ jobs:
     # Paso 4: Construir el proyecto Angular
     - name: Build Angular App
       working-directory: ./  # Apunta directamente al directorio raíz
-      run: npm run build --base-href=''
+      run: |
+        sudo ng build --configuration production --base-href='/'
 
-    # Paso 5: Copiar los archivos generados a la máquina remota en /var/html/angular-app/
+    # Paso 5: Copiar los archivos generados a la máquina remota en /var/www/angular-app/
     - name: Copy build to remote server
       env:
         REMOTE_USER: ${{ secrets.REMOTE_USER }}
@@ -47,8 +48,8 @@ jobs:
         mkdir -p ~/.ssh
         ssh-keyscan -H ${{ secrets.REMOTE_HOST }} >> ~/.ssh/known_hosts
         echo "Added ${{ secrets.REMOTE_HOST }} to known_hosts."
+        # Copiar los archivos desde dist/tv-shows a /var/www/angular-app en el servidor
         sshpass -p "${REMOTE_PASSWORD}" scp -r ./dist/tv-shows/* ${REMOTE_USER}@${REMOTE_HOST}:/var/www/angular-app/
-
 
     # Paso 6: Reiniciar Apache
     - name: Restart Apache
