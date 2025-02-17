@@ -1,0 +1,65 @@
+name: Build and Deploy Angular App
+
+on:
+  push:
+    branches:
+      - main  # Ejecuta solo cuando se hace push en la rama 'main'
+    paths:
+      - '**'  # Ejecuta para cualquier cambio en el repositorio
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    # Paso 1: Checar el repositorio
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    # Paso 2: Configurar Node.js
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '20'
+
+    # Paso 3: Instalar dependencias
+    - name: Install dependencies
+      working-directory: ./  # Trabaja en la raíz del repositorio
+      run: |
+        npm install
+        # Instalar Angular CLI si no está disponible
+        sudo npm install -g @angular/cli
+
+    # Paso 4: Construir el proyecto Angular
+    - name: Build Angular App
+      working-directory: ./  # Apunta directamente al directorio raíz
+      run: |
+        sudo ng build --configuration production --base-href='/'
+
+    # Paso 5: Copiar los archivos generados a la máquina remota en /var/www/angular-app/
+        # Paso 5: Copiar los archivos generados a la máquina remota en /var/www/angular-app/
+    - name: Copy build to remote server
+      env:
+        REMOTE_USER: ${{ secrets.REMOTE_USER }}
+        REMOTE_HOST: ${{ secrets.REMOTE_HOST }}
+        REMOTE_PASSWORD: ${{ secrets.REMOTE_PASSWORD }}
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y sshpass
+        mkdir -p ~/.ssh
+        ssh-keyscan -H ${{ secrets.REMOTE_HOST }} >> ~/.ssh/known_hosts
+        echo "Added ${{ secrets.REMOTE_HOST }} to known_hosts."
+        # Copiar los archivos usando ssh y sudo para que tenga permisos suficientes
+        sshpass -p "${REMOTE_PASSWORD}" ssh ${REMOTE_USER}@${REMOTE_HOST} "sudo mkdir -p /var/www/angular-app/"
+        sshpass -p "${REMOTE_PASSWORD}" scp -r ./dist/tv-shows/* ${REMOTE_USER}@${REMOTE_HOST}:/var/www/angular-app/
+        sshpass -p "${REMOTE_PASSWORD}" ssh ${REMOTE_USER}@${REMOTE_HOST} "sudo chown -R www-data:www-data /var/www/angular-app/ && sudo chmod -R 755 /var/www/angular-app/"
+
+
+    # Paso 6: Reiniciar Apache
+    - name: Restart Apache
+      env:
+        REMOTE_USER: ${{ secrets.REMOTE_USER }}
+        REMOTE_HOST: ${{ secrets.REMOTE_HOST }}
+        REMOTE_PASSWORD: ${{ secrets.REMOTE_PASSWORD }}
+      run: |
+        sshpass -p "${REMOTE_PASSWORD}" ssh ${REMOTE_USER}@${REMOTE_HOST} "sudo systemctl restart apache2"
