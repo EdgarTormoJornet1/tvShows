@@ -24,7 +24,7 @@ jobs:
 
     # Paso 3: Instalar dependencias en el directorio correcto
     - name: Install dependencies
-      working-directory: ./angular-app  # Apunta directamente al directorio de tu app Angular
+      working-directory: ./  # Trabaja en la raíz del repositorio
       run: |
         npm install
         # Instalar Angular CLI si no está disponible
@@ -32,7 +32,7 @@ jobs:
 
     # Paso 4: Construir el proyecto Angular
     - name: Build Angular App
-      working-directory: ./angular-app  # Apunta directamente al directorio de tu app Angular
+      working-directory: ./  # Apunta directamente al directorio raíz
       run: |
         npm run build --configuration=production --base-href '/tvShows/'
 
@@ -48,7 +48,7 @@ jobs:
         mkdir -p ~/.ssh
         ssh-keyscan -H ${{ secrets.REMOTE_HOST }} >> ~/.ssh/known_hosts
         echo "Added ${{ secrets.REMOTE_HOST }} to known_hosts."
-        sshpass -p "${REMOTE_PASSWORD}" scp -r ./angular-app/dist/tv-shows/* ${REMOTE_USER}@${REMOTE_HOST}:/var/html/angular-app/
+        sshpass -p "${REMOTE_PASSWORD}" scp -r ./dist/tv-shows/* ${REMOTE_USER}@${REMOTE_HOST}:/var/html/angular-app/
 
     # Paso 6: Reiniciar Apache
     - name: Restart Apache
