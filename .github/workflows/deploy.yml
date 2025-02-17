@@ -4,8 +4,6 @@ on:
   push:
     branches:
       - main  # Usa la rama 'master' para el trigger
-    paths:
-      - angular-app/**  # Ejecuta solo si se modifica esta carpeta
 
 jobs:
   build-and-deploy:
