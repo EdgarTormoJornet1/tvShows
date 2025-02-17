@@ -38,6 +38,7 @@ jobs:
 
     # Paso 5: Copiar los archivos generados a la máquina remota en /var/www/angular-app/
         # Paso 5: Copiar los archivos generados a la máquina remota en /var/www/angular-app/
+    # Paso 5: Copiar los archivos generados a la máquina remota en /var/www/angular-app/
     - name: Copy build to remote server
       env:
         REMOTE_USER: ${{ secrets.REMOTE_USER }}
@@ -49,12 +50,10 @@ jobs:
         mkdir -p ~/.ssh
         ssh-keyscan -H ${{ secrets.REMOTE_HOST }} >> ~/.ssh/known_hosts
         echo "Added ${{ secrets.REMOTE_HOST }} to known_hosts."
-        # Usar sudo para crear los directorios con permisos apropiados
-        sshpass -p "${REMOTE_PASSWORD}" ssh ${REMOTE_USER}@${REMOTE_HOST} "sudo mkdir -p /var/www/angular-app/browser /var/www/angular-app/media && sudo chown -R www-data:www-data /var/www/angular-app"
-        # Ahora hacer la copia con scp
+        # Copiar los archivos usando ssh y sudo para que tenga permisos suficientes
+        sshpass -p "${REMOTE_PASSWORD}" ssh ${REMOTE_USER}@${REMOTE_HOST} "sudo mkdir -p /var/www/angular-app/"
         sshpass -p "${REMOTE_PASSWORD}" scp -r ./dist/tv-shows/* ${REMOTE_USER}@${REMOTE_HOST}:/var/www/angular-app/
-        # Asegurar que los permisos son correctos
-        sshpass -p "${REMOTE_PASSWORD}" ssh ${REMOTE_USER}@${REMOTE_HOST} "sudo chmod -R 755 /var/www/angular-app/"
+        sshpass -p "${REMOTE_PASSWORD}" ssh ${REMOTE_USER}@${REMOTE_HOST} "sudo chown -R www-data:www-data /var/www/angular-app/ && sudo chmod -R 755 /var/www/angular-app/"
 
 
     # Paso 6: Reiniciar Apache
