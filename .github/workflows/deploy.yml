@@ -3,7 +3,7 @@ name: Build and Deploy Angular App
 on:
   push:
     branches:
-      - deploy  # Usa la rama 'master' para el trigger
+      - main  # Usa la rama 'master' para el trigger
     paths:
       - angular-app/**  # Ejecuta solo si se modifica esta carpeta
 
@@ -44,7 +44,7 @@ jobs:
         mkdir -p ~/.ssh
         ssh-keyscan -H ${{ secrets.REMOTE_HOST }} >> ~/.ssh/known_hosts
         echo "Added ${{ secrets.REMOTE_HOST }} to known_hosts."
-        sshpass -p "${REMOTE_PASSWORD}" scp -r angular-app/dist/tv-shows/browser/* ${REMOTE_USER}@${REMOTE_HOST}:/var/www/html
+        sshpass -p "${REMOTE_PASSWORD}" scp -r angular-app/dist/tv-shows/* ${REMOTE_USER}@${REMOTE_HOST}:/var/html/angular-app/
 
     # Paso 6: Reiniciar Apache
     - name: Restart Apache
