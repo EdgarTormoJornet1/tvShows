@@ -33,8 +33,7 @@ jobs:
     # Paso 4: Construir el proyecto Angular
     - name: Build Angular App
       working-directory: ./  # Apunta directamente al directorio raíz
-      run: |
-        npm run build --configuration=production --base-href '/tvShows/'
+      run: npm run build --base-href=''
 
     # Paso 5: Copiar los archivos generados a la máquina remota en /var/html/angular-app/
     - name: Copy build to remote server
