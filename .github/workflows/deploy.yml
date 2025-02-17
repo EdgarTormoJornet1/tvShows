@@ -1,0 +1,37 @@
+name: Build and Deploy Angular App to GitHub Pages
+
+on:
+  push:
+    branches:
+      - main  # Asegúrate de que se despliegue cuando se haga push a la rama 'main'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '20'
+
+    - name: Install dependencies
+      run: |
+        cd angular-app
+        npm install
+
+    - name: Build Angular App
+      run: |
+        cd angular-app
+        npm run build --configuration=production --base-href "/tvShows/"
+
+    - name: Deploy to GitHub Pages
+      uses: JamesIves/github-pages-deploy-action@v4.3.2
+      with:
+        branch: gh-pages  # Rama donde se desplegarán los archivos
+        folder: angular-app/dist/tv-shows  # Carpeta donde se encuentran los archivos generados
+        token: ${{ secrets.GITHUB_TOKEN }}  # Token de autenticación
+
