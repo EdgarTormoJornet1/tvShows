@@ -21,14 +21,14 @@ jobs:
         node-version: '20'
 
     - name: Install dependencies
-      working-directory: ./  # Asegúrate de estar en la raíz del proyecto
+      working-directory: ./ 
       run: |
         npm install
         # Instalar Angular CLI si no está disponible
         sudo npm install -g @angular/cli
 
     - name: Build Angular App
-      working-directory: ./  # En la raíz del proyecto
+      working-directory: ./  
       run: |
         npx ng build --configuration=production
 
