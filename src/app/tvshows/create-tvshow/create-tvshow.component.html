@@ -1,7 +1,20 @@
 <div class="container my-5 p-4 shadow-lg rounded" style="max-width: 600px; background-color: #f8f9fa;">
   <h2 class="text-center mb-4 text-gradient">Crear un TV Show</h2>
-  
+
   <form [formGroup]="tvshowForm" (ngSubmit)="insertTvShow()">
+
+    @if (successMessage) {
+
+      <div class="alert alert-success" role="alert">
+        {{ successMessage }}
+      </div>
+    } 
+    @if (errorMessage) {
+      <div class="alert alert-danger" role="alert">
+        {{ errorMessage }}
+      </div>
+    }
+
     <div class="mb-3">
       <label for="name" class="form-label fw-bold">Nombre del TV Show</label>
       <input 
@@ -11,15 +24,10 @@
         class="form-control"
         type="text"
         placeholder="Ingresa el nombre del TV Show"
-        [ngClass]="{
-          'is-valid': nameValid,
-          'is-invalid': !nameValid
-        }"
+        [ngClass]="{'is-invalid': nameNotValid, 'is-valid': nameValid}"
       />
-      @if (!nameValid) {
-        <div class="invalid-feedback">
-          Por favor, proporciona un nombre válido.
-        </div>
+      @if (nameNotValid) {
+        <div class="invalid-feedback">Por favor, proporciona un nombre válido.</div>
       }
     </div>
 
@@ -33,7 +41,11 @@
         type="number"
         placeholder="Ingresa el número de temporadas"
         min="1"
+        [ngClass]="{'is-invalid': seasonsNotValid, 'is-valid': seasonsValid}"
       />
+      @if (seasonsNotValid) {
+        <div class="invalid-feedback">Debe ser un número mayor a 0.</div>
+      }
     </div>
 
     <div class="mb-3">
@@ -46,7 +58,11 @@
         type="number"
         placeholder="Ingresa el número de episodios"
         min="1"
+        [ngClass]="{'is-invalid': episodesNotValid, 'is-valid': episodesValid}"
       />
+      @if (episodesNotValid) {
+        <div class="invalid-feedback">Debe ser un número mayor a 0.</div>
+      }
     </div>
 
     <div class="mb-3">
@@ -57,7 +73,11 @@
         id="first_air_date" 
         class="form-control"
         type="date"
+        [ngClass]="{'is-invalid': dateNotValid, 'is-valid': dateValid}"
       />
+      @if (dateNotValid) {
+        <div class="invalid-feedback">La fecha de estreno es obligatoria.</div>
+      }
     </div>
 
     <div class="mb-3">
@@ -72,7 +92,11 @@
         min="0"
         max="10"
         placeholder="Ingresa la puntuación"
+        [ngClass]="{'is-invalid': voteNotValid, 'is-valid': voteValid}"
       />
+      @if (voteNotValid) {
+        <div class="invalid-feedback">Debe estar entre 0 y 10.</div>
+      }
     </div>
 
     <div class="mb-3">
@@ -84,7 +108,11 @@
         class="form-control"
         type="text"
         placeholder="Ingresa los géneros separados por comas"
+        [ngClass]="{'is-invalid': genresNotValid, 'is-valid': genresValid}"
       />
+      @if (genresNotValid) {
+        <div class="invalid-feedback">Este campo es obligatorio.</div>
+      }
     </div>
 
     <div class="mb-3">
@@ -96,7 +124,11 @@
         class="form-control"
         type="text"
         placeholder="Ingresa los nombres de los creadores separados por comas"
+        [ngClass]="{'is-invalid': creatorsNotValid, 'is-valid': creatorsValid}"
       />
+      @if (creatorsNotValid) {
+        <div class="invalid-feedback">Este campo es obligatorio.</div>
+      }
     </div>
 
     <div class="mb-3">
@@ -108,19 +140,11 @@
         class="form-control"
         type="text"
         placeholder="Ingresa las redes de emisión separadas por comas"
+        [ngClass]="{'is-invalid': networksNotValid, 'is-valid': networksValid}"
       />
-    </div>
-
-    <div class="mb-3">
-      <label for="origin_country" class="form-label fw-bold">País de Origen</label>
-      <input 
-        name="origin_country"
-        formControlName="origin_country"
-        id="origin_country" 
-        class="form-control"
-        type="text"
-        placeholder="Ingresa el país de origen"
-      />
+      @if (networksNotValid) {
+        <div class="invalid-feedback">Este campo es obligatorio.</div>
+      }
     </div>
 
     <div class="d-grid">

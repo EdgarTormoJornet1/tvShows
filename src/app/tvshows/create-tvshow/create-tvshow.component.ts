@@ -14,6 +14,9 @@ export class CreateTvShowComponent implements OnInit{
 
   @Input('id') tvshowID?: string;
   tvshowForm: FormGroup;
+  successMessage: string = '';
+  errorMessage: string = '';
+  
 
 
     constructor(private supaService: SupabaseService, private formBuilder: FormBuilder){
@@ -26,17 +29,11 @@ export class CreateTvShowComponent implements OnInit{
         vote_average: ['', [Validators.required, Validators.min(0), Validators.max(10)]],
         genres: ['', Validators.required],
         created_by: ['', Validators.required],
-        networks: ['', Validators.required],
-        origin_country: ['', Validators.required]
-   
-         
+        networks: ['', Validators.required]
        });
     }
 
-    get nameValid(){
-      return this.tvshowForm.get('name')?.valid && 
-      this.tvshowForm.get('name')?.touched;
-    }
+    
 
     // get nameNotValid(){
     //   return this.tvshowForm.get('name')?.invalid && this.tvshowForm.get('name')?.touched;
@@ -57,6 +54,8 @@ export class CreateTvShowComponent implements OnInit{
 
     insertTvShow(): void {
       if (this.tvshowForm.invalid) {
+        this.tvshowForm.markAllAsTouched();
+        console.log("Formulario inválido:", this.tvshowForm.value);
         return;
       }
   
@@ -65,12 +64,58 @@ export class CreateTvShowComponent implements OnInit{
       this.supaService.insertTvShow('tv_shows', tvShowData).subscribe({
         next: (response) => {
           console.log('TV Show insertado correctamente:', response);
+          this.successMessage = 'TV Show insertado correctamente!';
+          this.tvshowForm.reset();
+    
+          setTimeout(() => {
+            this.successMessage = '';
+          }, 3000);
         },
         error: (err) => {
           console.error('Error al insertar el TV Show:', err);
+          this.errorMessage = 'Error al insertar: ' + err.message;
         }
       });
     }
+
+
+
+
+
+
+    getFieldValidity(fieldName: string) {
+      const field = this.tvshowForm.get(fieldName);
+      return {
+        invalid: field?.invalid && (field?.touched || field?.dirty),
+        valid: field?.valid && (field?.touched || field?.dirty)
+      };
+    }
+    
+    get nameNotValid() { return this.getFieldValidity('name').invalid; }
+    get nameValid() { return this.getFieldValidity('name').valid; }
+    
+    get seasonsNotValid() { return this.getFieldValidity('number_of_seasons').invalid; }
+    get seasonsValid() { return this.getFieldValidity('number_of_seasons').valid; }
+    
+    get episodesNotValid() { return this.getFieldValidity('number_of_episodes').invalid; }
+    get episodesValid() { return this.getFieldValidity('number_of_episodes').valid; }
+    
+    get dateNotValid() { return this.getFieldValidity('first_air_date').invalid; }
+    get dateValid() { return this.getFieldValidity('first_air_date').valid; }
+    
+    get voteNotValid() { return this.getFieldValidity('vote_average').invalid; }
+    get voteValid() { return this.getFieldValidity('vote_average').valid; }
+    
+    get genresNotValid() { return this.getFieldValidity('genres').invalid; }
+    get genresValid() { return this.getFieldValidity('genres').valid; }
+    
+    get creatorsNotValid() { return this.getFieldValidity('created_by').invalid; }
+    get creatorsValid() { return this.getFieldValidity('created_by').valid; }
+    
+    get networksNotValid() { return this.getFieldValidity('networks').invalid; }
+    get networksValid() { return this.getFieldValidity('networks').valid; }
+    
+    
     
 
 

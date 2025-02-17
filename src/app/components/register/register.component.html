@@ -38,8 +38,6 @@
             <div formGroupName="passwords" [ngClass]="crossPasswordsNotValid ? 'bg-warning' : 'bg-success'">
             <div class="mb-3" >
 
-                {{registerForm.get('passwords')?.status}}
-
                 <label for="exampleInputPassword1" class="form-label">Contraseña</label>
                 <input 
                 type="password" 
@@ -54,10 +52,10 @@
 
 
 
-            <!--
+
             @if (password1NotValid) {
                 <div class="alert alert-danger">La contraseña no tiene el formato correcto</div>
-            }-->
+            }
 
             <div class="mb-3">
                 <label for="exampleInputPassword2" class="form-label">Repite contraseña</label>
@@ -73,13 +71,13 @@
 
         </div>
 
-            <!--
+            
             @if (password2NotValid) {
                 <div class="alert alert-danger">La contraseña no tiene el formato correcto</div>
             }
-                -->
+                
     
-            <button type="submit" class="btn btn-primary" (click)="sendRegister()">Login</button>
+            <button type="submit" class="btn btn-primary" (click)="sendRegister()">Sing Up</button>
     
         </form>
     

@@ -83,12 +83,21 @@
 
 
                 @if (logged) {
-                    <a 
-                        [routerLink]="['/edit_tvshow', tvshow?.id]" 
-                        class="btn btn-custom text-white fw-bold shadow mt-4"
-                    >
-                        ✏️ Editar TV Show
-                    </a>
+                    <div class="d-flex gap-2 mt-4">
+                        <a 
+                            [routerLink]="['/edit_tvshow', tvshow?.id]" 
+                            class="btn btn-custom text-white fw-bold shadow"
+                        >
+                            Editar TV Show
+                        </a>
+                
+                        <button 
+                            (click)="deleteTvShow()" 
+                            class="btn btn-danger fw-bold shadow"
+                        >
+                            Eliminar
+                        </button>
+                    </div>
                 }
             </div>
         </div>

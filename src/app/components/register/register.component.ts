@@ -3,6 +3,7 @@ import { SupabaseService } from '../../services/supabase.service';
 import { AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-register',
@@ -14,8 +15,13 @@ export class RegisterComponent {
   
   registerForm: FormGroup;
 
+
+  email: string = '';
+  password: string = '';
+  error: string | undefined;
+
     
-  constructor(private supaService: SupabaseService, private formBuilder: FormBuilder){
+  constructor(private supaService: SupabaseService, private formBuilder: FormBuilder, private router: Router){
 
      this.registerForm = this.formBuilder.group({
        email: ['', [Validators.required, Validators.pattern("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$")]],
@@ -57,10 +63,16 @@ export class RegisterComponent {
   }
 
 
+
   get crossPasswordsNotValid(){
     if (this.registerForm.get('passwords')?.invalid) return true
     return false;
   }
+
+
+  
+
+  
 
 
 
@@ -86,12 +98,9 @@ export class RegisterComponent {
 
 
 
-  email: string = '';
-  password: string = '';
-  error: string | undefined;
+  
   
 
-  //TO DO
     sendRegister(){
       if (this.registerForm.valid) {
         const email = this.registerForm.get('email')?.value;
@@ -99,7 +108,8 @@ export class RegisterComponent {
 
 
         this.supaService.register(email,password).subscribe(
-          {next: registerData => console.log(registerData),
+          {next: registerData => {console.log(registerData)
+            this.router.navigate(['/login'])},
             complete: ()=> {console.log("complete")},
             error: error =>  this.error = error
            }

@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { ItvShow } from '../i-tvshow';
 import { SupabaseService } from '../../services/supabase.service';
 
@@ -16,7 +16,8 @@ export class TvshowDetailComponent implements OnInit {
   //public ingredients: Ingredient[] = [];
   logged: boolean = false;
 
-  constructor(private supabaseService: SupabaseService){
+  constructor(private supabaseService: SupabaseService,
+    private router: Router){
 
   }
 
@@ -42,9 +43,25 @@ export class TvshowDetailComponent implements OnInit {
     })
   }
 
-
+  deleteTvShow() {
+    const confirmation = window.confirm('¿Estás seguro de que quieres eliminar este TV Show?');
   
+    if (confirmation && this.tvshowID) {
+      this.supabaseService.deleteTvShow(this.tvshowID).subscribe({
+        next: () => {
+          alert('TV Show eliminado con éxito');
+          
+          this.router.navigate(['/main']);
+        },
+        error: (err) => {
+          console.error('Error al eliminar el tv-show:', err);
+          alert('Hubo un error al eliminar el TV Show. Por favor, intenta de nuevo.');
+        }
+      });
+    } else if (!confirmation) {
+      console.log('Eliminación cancelada');
+    }
 
-
+  }
 
 }

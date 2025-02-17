@@ -2,17 +2,18 @@
 
 
 .hero-section {
-  background-image: url('./DALL·E\ 2025-01-22\ 16.40.24\ -\ A\ vibrant\ welcome\ page\ for\ a\ TV\ shows\ website.\ The\ design\ features\ a\ cinematic\ background\ with\ iconic\ TV\ symbols\ like\ a\ vintage\ television\,\ streaming\ .webp'); /* Reemplaza con tu imagen */
+  background-image: url('DALL·E\ 2025-02-16\ 17.41.46\ -\ A\ bright\ and\ modern\ background\ image\ for\ a\ TV-shows\ related\ website.\ The\ design\ is\ clean\ and\ visually\ appealing\,\ featuring\ a\ light-themed\ aesthetic\ wi.webp'); /* Reemplaza con tu imagen */
   background-size: cover;
   background-position: center;
   height: 100vh; /* Ocupa toda la pantalla */
 }
 
-.hero-section .content {
-  background: rgba(0, 0, 0, 0.5); /* Fondo semi-transparente para mayor contraste */
+.hero-section .content { /* Fondo semi-transparente para mayor contraste */
   padding: 2rem;
   border-radius: 10px;
   font-family: 'Poppins', sans-serif; /* Fuente principal */
+  margin-left: 2.5%;
+  color: rgb(44, 44, 44);
 }
 
 .hero-section .content h1{

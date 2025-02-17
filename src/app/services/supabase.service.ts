@@ -203,4 +203,25 @@ export class SupabaseService {
   getInterval(): Observable<number>{
     return interval(1000)
   }
+
+
+
+
+  deleteTvShow(tvshowID: string) {
+    return from(
+      this.supabase
+        .from('tv_shows') // Suponiendo que la tabla se llama 'tv_shows'
+        .delete()
+        .match({ id: tvshowID }) // Eliminamos el registro que tiene el id especificado
+    ).pipe(
+      tap(({ data, error }) => {
+        if (error) {
+          console.log('Error al eliminar el tv-show:', error);
+          throw error;
+        } else {
+          console.log('Tv-show eliminado exitosamente:', data);
+        }
+      })
+    );
+  }
 }
