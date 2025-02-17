@@ -64,12 +64,12 @@ jobs:
     - name: Create Pull Request
       uses: peter-evans/create-pull-request@v5
       with:
-        branch: main
-        base: production  # Cambia a la rama destino de tu PR
-        title: "Auto PR: Deployment from `main` to `production`"
-        body: "Este PR se creó automáticamente después de un push a `main`."
-        labels: "auto-pr"
-        draft: false
+        branch: feature-auto-pr
+        title: "Automated Pull Request"
+        body: "This PR was automatically generated."
+        base: main
+        delete-branch: true
+
 
 
 
