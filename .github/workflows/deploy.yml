@@ -3,9 +3,9 @@ name: Build and Deploy Angular App
 on:
   push:
     branches:
-      - main
+      - main  # Ejecuta solo cuando se hace push en la rama 'main'
     paths:
-      - /**
+      - '**'  # Ejecuta para cualquier cambio en el repositorio
 
 jobs:
   build-and-deploy:
@@ -22,18 +22,21 @@ jobs:
       with:
         node-version: '20'
 
-    # Paso 3: Instalar dependencias en el directorio
+    # Paso 3: Instalar dependencias en el directorio del proyecto Angular (ya que está en /angular-app en tu repo)
     - name: Install dependencies
-      working-directory: /**
-      run: npm install
-
+      working-directory: ./angular-app  # Cambié el directorio aquí
+      run: |
+        npm install
+        # Instalar Angular CLI si no está disponible
+        npm install -g @angular/cli
 
     # Paso 4: Construir el proyecto Angular
     - name: Build Angular App
-      working-directory: /**
-      run: npm run build --base-href=''
+      working-directory: ./angular-app  # Cambié el directorio aquí
+      run: |
+        npm run build --configuration=production --base-href '/tvShows/'
 
-    # Paso 5: Copiar los archivos a la máquina remota por SCP
+    # Paso 5: Copiar los archivos generados a la máquina remota en /var/html/angular-app/
     - name: Copy build to remote server
       env:
         REMOTE_USER: ${{ secrets.REMOTE_USER }}
@@ -45,16 +48,14 @@ jobs:
         mkdir -p ~/.ssh
         ssh-keyscan -H ${{ secrets.REMOTE_HOST }} >> ~/.ssh/known_hosts
         echo "Added ${{ secrets.REMOTE_HOST }} to known_hosts."
-        sshpass -p "${REMOTE_PASSWORD}" scp -r /dist/tv-shows/browser/* ${REMOTE_USER}@${REMOTE_HOST}:/var/www/angular-app
+        sshpass -p "${REMOTE_PASSWORD}" scp -r ./angular-app/dist/tv-shows/* ${REMOTE_USER}@${REMOTE_HOST}:/var/html/angular-app/
 
-    # # Paso 6: Reiniciar Apache
-    # - name: Restart Apache
-    #   env:
-    #     REMOTE_USER: ${{ secrets.REMOTE_USER }}
-    #     REMOTE_HOST: ${{ secrets.REMOTE_HOST }}
-    #     REMOTE_PASSWORD: ${{ secrets.REMOTE_PASSWORD }}
-    #   run: |
-    #     sshpass -p "${REMOTE_PASSWORD}" ssh ${REMOTE_USER}@${REMOTE_HOST} "sudo systemctl restart apache2"
-
-
+    # Paso 6: Reiniciar Apache
+    - name: Restart Apache
+      env:
+        REMOTE_USER: ${{ secrets.REMOTE_USER }}
+        REMOTE_HOST: ${{ secrets.REMOTE_HOST }}
+        REMOTE_PASSWORD: ${{ secrets.REMOTE_PASSWORD }}
+      run: |
+        sshpass -p "${REMOTE_PASSWORD}" ssh ${REMOTE_USER}@${REMOTE_HOST} "sudo systemctl restart apache2"
 
