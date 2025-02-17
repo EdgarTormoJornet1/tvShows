@@ -3,42 +3,35 @@ name: Build and Deploy Angular App
 on:
   push:
     branches:
-      - main  # Ejecuta solo cuando se hace push en la rama 'main'
+      - main 
     paths:
-      - '**'  # Ejecuta para cualquier cambio en el repositorio
+      - '**'
 
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
 
     steps:
-    # Paso 1: Checar el repositorio
     - name: Checkout code
       uses: actions/checkout@v3
 
-    # Paso 2: Configurar Node.js
     - name: Set up Node.js
       uses: actions/setup-node@v3
       with:
         node-version: '20'
 
-    # Paso 3: Instalar dependencias
     - name: Install dependencies
-      working-directory: ./  # Trabaja en la raíz del repositorio
+      working-directory: ./
       run: |
         npm install
         # Instalar Angular CLI si no está disponible
         sudo npm install -g @angular/cli
 
-    # Paso 4: Construir el proyecto Angular
     - name: Build Angular App
-      working-directory: ./  # Apunta directamente al directorio raíz
+      working-directory: ./
       run: |
         sudo ng build --configuration production --base-href='/'
 
-    # Paso 5: Copiar los archivos generados a la máquina remota en /var/www/angular-app/
-        # Paso 5: Copiar los archivos generados a la máquina remota en /var/www/angular-app/
-    # Paso 5: Copiar los archivos generados a la máquina remota en /var/www/angular-app/
     - name: Copy build to remote server
       env:
         REMOTE_USER: ${{ secrets.REMOTE_USER }}
@@ -56,7 +49,6 @@ jobs:
         sshpass -p "${REMOTE_PASSWORD}" ssh ${REMOTE_USER}@${REMOTE_HOST} "sudo chown -R www-data:www-data /var/www/angular-app/ && sudo chmod -R 755 /var/www/angular-app/"
 
 
-    # Paso 6: Reiniciar Apache
     - name: Restart Apache
       env:
         REMOTE_USER: ${{ secrets.REMOTE_USER }}
