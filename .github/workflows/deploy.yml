@@ -1,36 +1,57 @@
-name: Build and Deploy Angular App to GitHub Pages
+name: Build and Deploy Angular App
 
 on:
   push:
     branches:
-      - main  # Asegúrate de que se despliegue cuando se haga push a la rama 'main'
+      - main  # Usa la rama 'master' para el trigger
+    paths:
+      - angular-app/**  # Ejecuta solo si se modifica esta carpeta
 
 jobs:
-  build:
+  build-and-deploy:
     runs-on: ubuntu-latest
 
     steps:
+    # Paso 1: Checar el repositorio
     - name: Checkout code
       uses: actions/checkout@v3
 
+    # Paso 2: Configurar Node.js
     - name: Set up Node.js
       uses: actions/setup-node@v3
       with:
         node-version: '20'
 
+    # Paso 3: Instalar dependencias en el directorio
     - name: Install dependencies
-      run: |
-        npm install
+      working-directory: angular-app  # Cambié este directorio a 'angular-app'
+      run: npm install
 
+    # Paso 4: Construir el proyecto Angular
     - name: Build Angular App
+      working-directory: angular-app  # Cambié este directorio a 'angular-app'
+      run: npm run build --configuration=production --base-href "/tvShows/"
+
+    # Paso 5: Copiar los archivos a la máquina remota por SCP
+    - name: Copy build to remote server
+      env:
+        REMOTE_USER: ${{ secrets.REMOTE_USER }}
+        REMOTE_HOST: ${{ secrets.REMOTE_HOST }}
+        REMOTE_PASSWORD: ${{ secrets.REMOTE_PASSWORD }}
       run: |
-        npm run build --configuration=production --base-href "/tvShows/"
+        sudo apt-get update
+        sudo apt-get install -y sshpass
+        mkdir -p ~/.ssh
+        ssh-keyscan -H ${{ secrets.REMOTE_HOST }} >> ~/.ssh/known_hosts
+        echo "Added ${{ secrets.REMOTE_HOST }} to known_hosts."
+        sshpass -p "${REMOTE_PASSWORD}" scp -r angular-app/dist/tv-shows/browser/* ${REMOTE_USER}@${REMOTE_HOST}:/var/www/html
 
-    - name: Deploy to GitHub Pages
-      uses: JamesIves/github-pages-deploy-action@v4.3.2
-      with:
-        branch: gh-pages  # Rama donde se desplegarán los archivos
-        folder: dist/tv-shows  # Carpeta donde se encuentran los archivos generados
-        token: ${{ secrets.TOKEN }}  # Token de autenticación
-
+    # Paso 6: Reiniciar Apache
+    - name: Restart Apache
+      env:
+        REMOTE_USER: ${{ secrets.REMOTE_USER }}
+        REMOTE_HOST: ${{ secrets.REMOTE_HOST }}
+        REMOTE_PASSWORD: ${{ secrets.REMOTE_PASSWORD }}
+      run: |
+        sshpass -p "${REMOTE_PASSWORD}" ssh ${REMOTE_USER}@${REMOTE_HOST} "sudo systemctl restart apache2"
 
