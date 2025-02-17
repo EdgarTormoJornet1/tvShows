@@ -3,7 +3,7 @@ name: Build and Deploy Angular App
 on:
   push:
     branches:
-      - main  # Usa la rama 'master' para el trigger
+      - deploy  # Usa la rama 'master' para el trigger
     paths:
       - angular-app/**  # Ejecuta solo si se modifica esta carpeta
 
