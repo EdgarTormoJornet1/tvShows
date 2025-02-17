@@ -33,5 +33,5 @@ jobs:
       with:
         branch: gh-pages  # Rama donde se desplegarán los archivos
         folder: angular-app/dist/tv-shows  # Carpeta donde se encuentran los archivos generados
-        token: ${{ secrets.GITHUB_TOKEN }}  # Token de autenticación
+        token: ${{ secrets.TOKEN }}  # Token de autenticación
 
