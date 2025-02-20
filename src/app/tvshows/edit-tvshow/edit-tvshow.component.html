@@ -1,0 +1,157 @@
+<div class="container my-5 p-4 shadow-lg rounded" style="max-width: 600px; background-color: #f8f9fa;">
+    <h2 class="text-center mb-4 text-gradient">Editar un TV Show</h2>
+  
+    <form [formGroup]="tvshowForm" (ngSubmit)="updateTvShow()">
+  
+      @if (successMessage) {
+  
+        <div class="alert alert-success" role="alert">
+          {{ successMessage }}
+        </div>
+      } 
+      @if (errorMessage) {
+        <div class="alert alert-danger" role="alert">
+          {{ errorMessage }}
+        </div>
+      }
+  
+      <div class="mb-3">
+        <label for="name" class="form-label fw-bold">Nombre del TV Show</label>
+        <input
+          id="name"
+          type="text"
+          class="form-control"
+          formControlName="name"
+          placeholder="Ingresa el nombre del TV Show"
+          [ngClass]="{'is-invalid': nameNotValid, 'is-valid': nameValid}"
+        />
+        @if (nameNotValid) {
+          <div class="invalid-feedback">Por favor, proporciona un nombre válido.</div>
+        }
+      </div>
+  
+      <div class="mb-3">
+        <label for="number_of_seasons" class="form-label fw-bold">Número de Temporadas</label>
+        <input 
+          name="number_of_seasons"
+          formControlName="number_of_seasons"
+          id="number_of_seasons" 
+          class="form-control"
+          type="number"
+          placeholder="Ingresa el número de temporadas"
+          min="1"
+          [ngClass]="{'is-invalid': seasonsNotValid, 'is-valid': seasonsValid}"
+        />
+        @if (seasonsNotValid) {
+          <div class="invalid-feedback">Debe ser un número mayor a 0.</div>
+        }
+      </div>
+  
+      <div class="mb-3">
+        <label for="number_of_episodes" class="form-label fw-bold">Número de Episodios</label>
+        <input 
+          name="number_of_episodes"
+          formControlName="number_of_episodes"
+          id="number_of_episodes" 
+          class="form-control"
+          type="number"
+          placeholder="Ingresa el número de episodios"
+          min="1"
+          [ngClass]="{'is-invalid': episodesNotValid, 'is-valid': episodesValid}"
+        />
+        @if (episodesNotValid) {
+          <div class="invalid-feedback">Debe ser un número mayor a 0.</div>
+        }
+      </div>
+  
+      <div class="mb-3">
+        <label for="first_air_date" class="form-label fw-bold">Fecha de Estreno</label>
+        <input 
+          name="first_air_date"
+          formControlName="first_air_date"
+          id="first_air_date" 
+          class="form-control"
+          type="date"
+          [ngClass]="{'is-invalid': dateNotValid, 'is-valid': dateValid}"
+        />
+        @if (dateNotValid) {
+          <div class="invalid-feedback">La fecha de estreno es obligatoria.</div>
+        }
+      </div>
+  
+      <div class="mb-3">
+        <label for="vote_average" class="form-label fw-bold">Puntuación</label>
+        <input 
+          name="vote_average"
+          formControlName="vote_average"
+          id="vote_average" 
+          class="form-control"
+          type="number"
+          step="0.1"
+          min="0"
+          max="10"
+          placeholder="Ingresa la puntuación"
+          [ngClass]="{'is-invalid': voteNotValid, 'is-valid': voteValid}"
+        />
+        @if (voteNotValid) {
+          <div class="invalid-feedback">Debe estar entre 0 y 10.</div>
+        }
+      </div>
+  
+      <div class="mb-3">
+        <label for="genres" class="form-label fw-bold">Géneros</label>
+        <input 
+          name="genres"
+          formControlName="genres"
+          id="genres" 
+          class="form-control"
+          type="text"
+          placeholder="Ingresa los géneros separados por comas"
+          [ngClass]="{'is-invalid': genresNotValid, 'is-valid': genresValid}"
+        />
+        @if (genresNotValid) {
+          <div class="invalid-feedback">Este campo es obligatorio.</div>
+        }
+      </div>
+  
+      <div class="mb-3">
+        <label for="created_by" class="form-label fw-bold">Creadores</label>
+        <input 
+          name="created_by"
+          formControlName="created_by"
+          id="created_by" 
+          class="form-control"
+          type="text"
+          placeholder="Ingresa los nombres de los creadores separados por comas"
+          [ngClass]="{'is-invalid': creatorsNotValid, 'is-valid': creatorsValid}"
+        />
+        @if (creatorsNotValid) {
+          <div class="invalid-feedback">Este campo es obligatorio.</div>
+        }
+      </div>
+  
+      <div class="mb-3">
+        <label for="networks" class="form-label fw-bold">Red de Emisión</label>
+        <input 
+          name="networks"
+          formControlName="networks"
+          id="networks" 
+          class="form-control"
+          type="text"
+          placeholder="Ingresa las redes de emisión separadas por comas"
+          [ngClass]="{'is-invalid': networksNotValid, 'is-valid': networksValid}"
+        />
+        @if (networksNotValid) {
+          <div class="invalid-feedback">Este campo es obligatorio.</div>
+        }
+      </div>
+  
+      <div class="d-grid">
+        <button type="submit" class="btn btn-primary text-light fw-bold rounded-pill shadow-lg">
+          Guardar TV Show
+        </button>
+      </div>
+      
+    </form>
+  </div>
+  

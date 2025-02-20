@@ -1,10 +1,21 @@
 <div class="container">
   <div class="row g-4 mt-1">
-    @for (tvshow of tvshows | filter:searchValue; track $index) {
+    @for (tvshow of tvshows; track tvshow.id) {
     <div class="col">
       <app-tvshow-card [tvshow]="tvshow"></app-tvshow-card>
     </div>
 
     }
   </div>
+
+  <div class="pagination-controls">
+    <button (click)="prevPage()" [disabled]="currentPage === 1" class="pagination-button prev">
+      Anterior
+    </button>
+    <span class="pagination-page">Página {{ currentPage }}</span>
+    <button (click)="nextPage()" class="pagination-button next">
+      Siguiente
+    </button>
+  </div>
+  
 </div>

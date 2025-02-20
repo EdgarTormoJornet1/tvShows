@@ -6,6 +6,7 @@ import { RegisterComponent } from './components/register/register.component';
 import { TvshowDetailComponent } from './tvshows/tvshow-detail/tvshow-detail.component';
 import { CreateTvShowComponent } from './tvshows/create-tvshow/create-tvshow.component';
 import { supabaseLoginGuard } from './guards/supabase-login.guard';
+import { EditTvshowComponent } from './tvshows/edit-tvshow/edit-tvshow.component';
 
 export const routes: Routes = [
     {path: 'home', component: HomeComponent},
@@ -13,6 +14,7 @@ export const routes: Routes = [
     {path: 'login', component: LoginComponent},
     {path: 'register', component: RegisterComponent},
     {path: 'create', component: CreateTvShowComponent, canActivate:[supabaseLoginGuard]},
+    {path: 'edit_tvshow/:id', component: EditTvshowComponent, canActivate:[supabaseLoginGuard]},
     {path: 'tvshow/:id', component: TvshowDetailComponent},
     {path: '**', pathMatch: 'full', redirectTo: 'home'},
     

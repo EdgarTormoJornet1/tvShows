@@ -29,14 +29,9 @@ export class TvshowDetailComponent implements OnInit {
     this.supabaseService.loggedSubject.subscribe(logged => this.logged = logged)
     this.supabaseService.isLogged();
 
-    this.supabaseService.getTvshows(this.tvshowID).subscribe({
+    this.supabaseService.getTvshowsID(this.tvshowID).subscribe({
       next: tvshow => {
        this.tvshow = tvshow[0];
-      // this.supabaseService.getIngredients(this.recipe?.idIngredients).subscribe({
-      //   next: ingredients => {
-      //     this.ingredients.push(ingredients);
-      //   }
-      // });
       },
       error: err => console.log(err),
       complete: ()=> console.log('Received')

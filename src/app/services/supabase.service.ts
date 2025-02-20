@@ -47,7 +47,7 @@ export class SupabaseService {
   }
 
 
-  getTvshows(search?: string): Observable<ItvShow[]>{
+  getTvshowsID(search?: string): Observable<ItvShow[]>{
     return this.getDataObservable<ItvShow>('tv_shows',search ? {id: search}: undefined).pipe(
       map((data) => data.flat())
     );
@@ -210,9 +210,9 @@ export class SupabaseService {
   deleteTvShow(tvshowID: string) {
     return from(
       this.supabase
-        .from('tv_shows') // Suponiendo que la tabla se llama 'tv_shows'
+        .from('tv_shows')
         .delete()
-        .match({ id: tvshowID }) // Eliminamos el registro que tiene el id especificado
+        .match({ id: tvshowID })
     ).pipe(
       tap(({ data, error }) => {
         if (error) {
@@ -224,4 +224,99 @@ export class SupabaseService {
       })
     );
   }
+
+  // getTvshows(search?: string, nombre: string = ""): Observable<ItvShow[]> {
+  //   let query = this.supabase.from('tv_shows').select('*');
+  //   if (search) {
+  //     if (nombre === "") {
+  //       query = query.or('name.ilike.' + search); // Modifica esto para buscar por nombre
+        
+  //     } else {
+
+  //     }
+  //     query = query.ilike(nombre, `%${search}%`);
+  //      // Modifica esto para buscar por nombre
+  //   }
+  //   return from(query).pipe(
+  //     map(({ data, error }) => {
+  //       if (error) {
+  //         console.error('Error fetching tv shows:', error);
+  //         return [];
+  //       }
+  //       return data as ItvShow[];
+  //     })
+  //   );
+  // }
+
+  getTvshows(search: string = "", nombre: string = "", page: number = 1, pageSize: number = 10): Observable<ItvShow[]> {
+    let query = this.supabase.from('tv_shows').select('*');
+
+    if (search) {
+        if (nombre === "") {
+            query = query.or(`name.ilike.%${search}%`);
+        } else {
+            query = query.ilike(nombre, `%${search}%`);
+        }
+    }
+
+    const start = (page - 1) * pageSize;
+    const end = start + pageSize - 1;
+    query = query.range(start, end);
+
+    return from(query).pipe(
+        map(({ data, error }) => {
+            if (error) {
+                console.error('Error fetching tv shows:', error);
+                return [];
+            }
+            return data as ItvShow[];
+        })
+    );
+}
+
+
+
+  
+
+  // getTvShow(attribute: string, value: number): Observable<any> {
+  //   return from(
+  //     this.supabase
+  //       .from('tv_shows')
+  //       .select()
+  //       .eq(attribute, value) // Convierte el valor a número si es necesario
+  //   );
+  // }
+
+  getTvShowByAttribute(atributo: string, searchText: string, page: number = 1, pageSize: number = 10): Observable<{ data: ItvShow[] }> {
+    let query = this.supabase
+      .from('tv_shows')
+      .select('*')
+      .ilike(atributo, `%${searchText}%`);
+  
+    const start = (page - 1) * pageSize;
+    const end = start + pageSize - 1;
+    query = query.range(start, end);
+  
+    return from(query).pipe(
+      map(({ data, error }) => {
+        if (error) {
+          console.error('Error en la búsqueda de TV Shows:', error);
+          return { data: [] };
+        }
+        return { data: data as ItvShow[] };
+      })
+    );
+  }
+  
+
+
+  updateTvShow(tvshowID?: string, tvshowData?: any): Observable<any> {
+    return from(
+      this.supabase
+        .from('tv_shows')
+        .update(tvshowData)
+        .eq('id', tvshowID)
+    );
+  }
+  
 }
